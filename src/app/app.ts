@@ -1,16 +1,35 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Header } from './components/header/header';
+import { UserTableComponent } from './components/body/body';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Header,UserTableComponent, UserTableComponent],
   template: `
     <h1>Welcome to {{ title() }}!</h1>
+    <button (click)="resetCounter()">Reset counter</button>
+    <button (click)="increaseCounter()">Increase counter</button>
+    <p>number of clicks: {{counter}}</p>
 
     <router-outlet />
+    <app-header/>
+    <user-table/>
   `,
-  styles: [],
+  styles: [
+    `button {
+      background-color: red;
+    }`
+  ],
 })
 export class App {
   protected readonly title = signal('second-ng-app');
+   counter: number = 0;
+
+  resetCounter() {
+    this.counter = 0   
+  }
+  increaseCounter() {
+    this.counter++    
+  }
 }
