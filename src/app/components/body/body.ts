@@ -9,9 +9,10 @@ import { HeroModel } from '../../models/HeroModel';
   standalone: true,
   imports: [CommonModule, MatTableModule],
   template: `
-    <h2>Material User Table</h2>
+    <h2>All Heroes</h2>
 
-    <table *ngIf="hero() as h" mat-table [dataSource]="[h]" class="mat-elevation-z8">
+    <table 
+     mat-table [dataSource]="hero()" class="mat-elevation-z8" >
 
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -36,15 +37,15 @@ import { HeroModel } from '../../models/HeroModel';
     </table>
   `
 })
-export class UserTableComponent implements OnInit {
+export class HeroTableComponent implements OnInit {
   private http = inject(HttpClient);
 
-  hero = signal<HeroModel | null>(null);
+  hero = signal<HeroModel[]>([]);
 
   displayedColumns: string[] = ['id', 'name', 'health'];
 
   ngOnInit(): void {
-    this.http.get<HeroModel>('https://localhost:7098/api/Hero/1')
+    this.http.get<HeroModel[]>('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10')
       .subscribe(res => this.hero.set(res));
   }
 }

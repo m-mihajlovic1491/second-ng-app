@@ -1,6 +1,21 @@
-header {
+nav {
     display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 40px;
     background-color: black;
     color: aliceblue;
     border-style: ridge;
+    width: 100vw;
+    height: 30px;
+    text-align: justify;    
+}
+
+a {
+    cursor: pointer;
+    color:inherit;    
+}
+
+a:hover {
+    color: yellow;
 }
