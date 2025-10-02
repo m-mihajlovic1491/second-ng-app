@@ -7,7 +7,7 @@ import { HeroTableComponent } from './components/body/body';
   selector: 'app-root',
   imports: [RouterOutlet, Header],
   template: `
-    <h1>Welcome to {{ title() }}!</h1>
+    <h1>Welcome to strategy game</h1>
     <button (click)="resetCounter()">Reset counter</button>
     <button (click)="increaseCounter()">Increase counter</button>
     <p>number of clicks: {{counter}}</p>
@@ -21,8 +21,7 @@ import { HeroTableComponent } from './components/body/body';
     }`
   ],
 })
-export class App {
-  protected readonly title = signal('second-ng-app');
+export class App {  
    counter: number = 0;
 
   resetCounter() {
