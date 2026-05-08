@@ -1,0 +1,17 @@
+<h1>Create new weapon</h1>
+
+<mat-form-field>
+  <mat-label>Weapon name</mat-label>
+  <input matInput placeholder="Enter weapon name" [formControl]="nameControl" />
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Damage</mat-label>
+  <input matInput type="number" placeholder="Enter weapon damage" [formControl]="damageControl" />
+</mat-form-field>
+
+<button type="button" (click)="createWeapon()">Create weapon</button>
+
+<div *ngIf="message()" class="message">
+  {{ message() }}
+</div>

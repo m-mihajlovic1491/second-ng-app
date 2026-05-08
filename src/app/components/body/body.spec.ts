@@ -1,23 +1,35 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HeroTableComponent } from './body';
 
-import { Body } from './body';
-
-describe('Body', () => {
-  let component: Body;
-  let fixture: ComponentFixture<Body>;
+describe('HeroTableComponent', () => {
+  let component: HeroTableComponent;
+  let fixture: ComponentFixture<HeroTableComponent>;
+  let httpMock: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Body]
-    })
-    .compileComponents();
+      imports: [HeroTableComponent],
+      providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Body);
+    httpMock = TestBed.inject(HttpTestingController);
+    fixture = TestBed.createComponent(HeroTableComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('should create', () => {
+    fixture.detectChanges();
+    const request = httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10');
+    request.flush([]);
+
     expect(component).toBeTruthy();
+    expect(component.hero()).toEqual([]);
   });
 });
