@@ -3,6 +3,12 @@
   white-space: nowrap;
 }
 
-.battle-logs-table td:last-child {
-  min-width: 520px;
+.battle-logs-table th,
+.battle-logs-table td {
+  white-space: nowrap;
+}
+
+.battle-logs-table td:last-child,
+.battle-logs-table th:last-child {
+  min-width: 200px;
 }

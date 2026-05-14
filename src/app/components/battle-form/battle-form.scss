@@ -1,0 +1,16 @@
+.loading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0 0.5rem;
+}
+
+.result {
+  margin: 1rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 72%, transparent);
+  background: color-mix(in srgb, var(--mat-sys-surface-container) 92%, #0c1321);
+  white-space: pre-wrap;
+  font: var(--mat-sys-body-medium);
+}

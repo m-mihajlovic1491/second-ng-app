@@ -1,0 +1,65 @@
+<mat-card class="page-card form-card">
+  <mat-card-header>
+    <mat-card-title>Start Battle</mat-card-title>
+    <mat-card-subtitle>Select one hero and one monster to fight.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoadingRoster()) {
+      <div class="loading-row">
+        <mat-spinner [diameter]="24" />
+        <span>Loading heroes and monsters...</span>
+      </div>
+    } @else {
+      <div class="form-grid">
+        <mat-form-field>
+          <mat-label>Hero</mat-label>
+          <mat-select [formControl]="heroControl">
+            @for (hero of heroes(); track hero.id) {
+              <mat-option [value]="hero.id">
+                {{ heroLabel(hero) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Monster</mat-label>
+          <mat-select [formControl]="monsterControl">
+            @for (monster of monsters(); track monster.id) {
+              <mat-option [value]="monster.id">
+                {{ monsterLabel(monster) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions class="actions-row">
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="isLoadingRoster() || isBattleInProgress()"
+      (click)="startBattle()"
+    >
+      Start battle
+    </button>
+  </mat-card-actions>
+
+  @if (isBattleInProgress()) {
+    <div class="message">Battle in progress...</div>
+  }
+
+  @if (errorMessage()) {
+    <div class="message error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (message()) {
+    <pre class="result">{{ message() }}</pre>
+  }
+</mat-card>

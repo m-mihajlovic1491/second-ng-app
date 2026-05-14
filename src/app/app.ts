@@ -70,6 +70,13 @@ import { map } from 'rxjs/operators';
           >
           <a
             mat-button
+            routerLink="/battle"
+            routerLinkActive="active-link"
+            (click)="closeDrawerOnMobile(drawer)"
+            >Battle</a
+          >
+          <a
+            mat-button
             routerLink="/battle-audit-logs"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
