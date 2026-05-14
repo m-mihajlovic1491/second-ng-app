@@ -1,22 +1,35 @@
-<h1>Create new monster</h1>
+<mat-card class="page-card form-card">
+  <mat-card-header>
+    <mat-card-title>Create New Monster</mat-card-title>
+    <mat-card-subtitle>Recruit new threats for your world encounters.</mat-card-subtitle>
+  </mat-card-header>
 
-<mat-form-field>
-  <mat-label>Monster name</mat-label>
-  <input matInput placeholder="Enter monster name" [formControl]="nameControl" />
-</mat-form-field>
+  <mat-card-content>
+    <div class="form-grid">
+      <mat-form-field>
+        <mat-label>Monster name</mat-label>
+        <input matInput placeholder="Enter monster name" [formControl]="nameControl" />
+      </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Damage</mat-label>
-  <input matInput type="number" placeholder="Enter monster damage" [formControl]="damageControl" />
-</mat-form-field>
+      <mat-form-field>
+        <mat-label>Damage</mat-label>
+        <input matInput type="number" placeholder="Enter monster damage" [formControl]="damageControl" />
+      </mat-form-field>
 
-<mat-form-field>
-  <mat-label>Defense</mat-label>
-  <input matInput type="number" placeholder="Enter monster defense" [formControl]="defenseControl" />
-</mat-form-field>
+      <mat-form-field>
+        <mat-label>Defense</mat-label>
+        <input matInput type="number" placeholder="Enter monster defense" [formControl]="defenseControl" />
+      </mat-form-field>
+    </div>
+  </mat-card-content>
 
-<button type="button" (click)="createMonster()">Create monster</button>
+  <mat-card-actions class="actions-row">
+    <button mat-flat-button color="primary" type="button" (click)="createMonster()">Create monster</button>
+  </mat-card-actions>
 
-<div *ngIf="message()" class="message">
-  {{ message() }}
-</div>
+  @if (message()) {
+    <div class="message">
+      {{ message() }}
+    </div>
+  }
+</mat-card>

@@ -1,3 +1,9 @@
-table {
-  width: 100%;
+.search-field {
+  width: min(340px, 100%);
+  margin-bottom: 0.75rem;
+}
+
+.monsters-table td,
+.monsters-table th {
+  white-space: nowrap;
 }

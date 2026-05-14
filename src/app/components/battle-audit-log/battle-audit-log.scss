@@ -1,0 +1,8 @@
+.battle-logs-table th:first-child,
+.battle-logs-table td:first-child {
+  white-space: nowrap;
+}
+
+.battle-logs-table td:last-child {
+  min-width: 520px;
+}

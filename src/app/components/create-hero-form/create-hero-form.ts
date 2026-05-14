@@ -2,26 +2,41 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule, MatLabel } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-create-hero-form',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, MatFormFieldModule,ReactiveFormsModule,MatInputModule],
+  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, MatButtonModule],
   template: `
-  <h1>Create new hero</h1>
+    <mat-card class="page-card form-card">
+      <mat-card-header>
+        <mat-card-title>Create New Hero</mat-card-title>
+        <mat-card-subtitle>Add a champion to your active roster.</mat-card-subtitle>
+      </mat-card-header>
 
-  <mat-form-field>
-        <mat-label>Enter new hero name</mat-label>
-        <input matInput placeholder="Enter new hero name" [formControl]="formControl" (keyup.enter)="onSearch()">
-     </mat-form-field>
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field>
+            <mat-label>Hero name</mat-label>
+            <input matInput placeholder="Enter new hero name" [formControl]="formControl" (keyup.enter)="onSearch()">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
 
-  <div *ngIf="errorMessage()" style="color: red; margin-top: 10px;">
-  {{ errorMessage() }}
-</div>
+      <mat-card-actions class="actions-row">
+        <button mat-flat-button color="primary" type="button" (click)="onSearch()">Create hero</button>
+      </mat-card-actions>
+
+      @if (errorMessage()) {
+        <div class="message">
+          {{ errorMessage() }}
+        </div>
+      }
+    </mat-card>
   `,
   styleUrl: './create-hero-form.scss'
 })

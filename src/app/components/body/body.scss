@@ -1,7 +1,9 @@
-.mat-elevation-z8 {
-    border: 2px solid;
-    width: 100%;
-    background-color: #acafc9;
-    border-radius: 4px;
-    overflow:hidden;  
+.search-field {
+  width: min(340px, 100%);
+  margin-bottom: 0.75rem;
+}
+
+.heroes-table td,
+.heroes-table th {
+  white-space: nowrap;
 }

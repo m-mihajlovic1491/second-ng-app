@@ -1,41 +1,47 @@
-<h2>All Monsters</h2>
+<section class="page-card">
+  <h2 class="section-title">All Monsters</h2>
 
-<mat-form-field>
-  <mat-label>Search</mat-label>
-  <input
-    matInput
-    placeholder="Search Monster"
-    [formControl]="formControl"
-    (keyup.enter)="onSearch()"
-  />
-</mat-form-field>
+  <mat-form-field class="search-field">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      placeholder="Search Monster"
+      [formControl]="formControl"
+      (keyup.enter)="onSearch()"
+    />
+  </mat-form-field>
 
-<table mat-table [dataSource]="monsters()" class="mat-elevation-z8">
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let monster">{{ monster.id }}</td>
-  </ng-container>
+  <div class="table-shell">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="monsters()" class="monsters-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let monster">{{ monster.id }}</td>
+        </ng-container>
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let monster">{{ monster.name }}</td>
-  </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let monster">{{ monster.name }}</td>
+        </ng-container>
 
-  <ng-container matColumnDef="damage">
-    <th mat-header-cell *matHeaderCellDef>Damage</th>
-    <td mat-cell *matCellDef="let monster">{{ monster.damage }}</td>
-  </ng-container>
+        <ng-container matColumnDef="damage">
+          <th mat-header-cell *matHeaderCellDef>Damage</th>
+          <td mat-cell *matCellDef="let monster">{{ monster.damage }}</td>
+        </ng-container>
 
-  <ng-container matColumnDef="defense">
-    <th mat-header-cell *matHeaderCellDef>Defense</th>
-    <td mat-cell *matCellDef="let monster">{{ monster.defense }}</td>
-  </ng-container>
+        <ng-container matColumnDef="defense">
+          <th mat-header-cell *matHeaderCellDef>Defense</th>
+          <td mat-cell *matCellDef="let monster">{{ monster.defense }}</td>
+        </ng-container>
 
-  <ng-container matColumnDef="health">
-    <th mat-header-cell *matHeaderCellDef>Health</th>
-    <td mat-cell *matCellDef="let monster">{{ monster.health }}</td>
-  </ng-container>
+        <ng-container matColumnDef="health">
+          <th mat-header-cell *matHeaderCellDef>Health</th>
+          <td mat-cell *matCellDef="let monster">{{ monster.health }}</td>
+        </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+</section>

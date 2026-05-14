@@ -7,29 +7,31 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-battle-audit-log',
+  standalone: true,
   imports: [CommonModule, MatTableModule,MatIconModule],
   template: `
-  <h1>Battle Logs</h1>
+    <section class="page-card">
+      <h1 class="section-title">Battle Logs</h1>
 
-  <table 
-     mat-table [dataSource]="BattleLogs()" class="mat-elevation-z8" >
+      <div class="table-shell">
+        <div class="table-scroll">
+          <table mat-table [dataSource]="BattleLogs()" class="battle-logs-table">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef> ID </th>
+              <td mat-cell *matCellDef="let log"> {{ log.id }} </td>
+            </ng-container>
 
-      
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let log"> {{ log.id }} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="battleLog">
-        <th mat-header-cell *matHeaderCellDef> Battle Log </th>
-        <td mat-cell *matCellDef="let log"> {{ log.battleLog }} </td>
-      </ng-container>      
+            <ng-container matColumnDef="battleLog">
+              <th mat-header-cell *matHeaderCellDef> Battle Log </th>
+              <td mat-cell *matCellDef="let log"> {{ log.battleLog }} </td>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let hero; columns: displayedColumns;"></tr>
-    </table>
-
-
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let hero; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </section>
   `,
   styleUrl: './battle-audit-log.scss'
 })
