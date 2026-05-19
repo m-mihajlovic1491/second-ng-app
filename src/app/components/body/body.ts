@@ -42,12 +42,12 @@ import { MatInputModule } from '@angular/material/input';
 
             <ng-container matColumnDef="equippedWeapon">
               <th mat-header-cell *matHeaderCellDef> Weapon </th>
-              <td mat-cell *matCellDef="let hero"> {{ formatValue(hero.equippedWeapon) }} </td>
+              <td mat-cell *matCellDef="let hero"> {{ formatValue(hero.equippedWeapon?.name) }} </td>
             </ng-container>
 
             <ng-container matColumnDef="equippedArmor">
               <th mat-header-cell *matHeaderCellDef> Armor </th>
-              <td mat-cell *matCellDef="let hero"> {{ formatValue(hero.equippedArmor) }} </td>
+              <td mat-cell *matCellDef="let hero"> {{ formatValue(hero.equippedArmor?.name) }} </td>
             </ng-container>
 
             <ng-container matColumnDef="action">
@@ -68,40 +68,46 @@ import { MatInputModule } from '@angular/material/input';
   `
 })
 export class HeroTableComponent implements OnInit {
-  private http = inject(HttpClient);
-  formControl = new FormControl('')
+  private readonly http = inject(HttpClient);
+  private readonly apiBaseUrl =
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
+    'https://localhost:7098';
+
+  formControl = new FormControl('');
 
   hero = signal<HeroModel[]>([]);
 
-  displayedColumns: string[] = ['id', 'name', 'health','equippedWeapon','equippedArmor','action'];
+  displayedColumns: string[] = ['id', 'name', 'health', 'equippedWeapon', 'equippedArmor', 'action'];
 
   ngOnInit(): void {
     this.loadAllHeroes();
   }
   
-  onSearch () {
-    const search = this.formControl.value?.trim()
-    this.http.get<HeroModel[]>(`https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10&search=${search}`)
+  onSearch() {
+    const search = this.formControl.value?.trim();
+    this.http.get<HeroModel[]>(
+      `${this.apiBaseUrl}/api/Hero/Heroes?pageIndex=0&pageSize=1000&search=${search}`
+    )
       .subscribe(res => this.hero.set(res));
   }
 
   loadAllHeroes() {
-    this.http.get<HeroModel[]>('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10')
+    this.http.get<HeroModel[]>(`${this.apiBaseUrl}/api/Hero/Heroes?pageIndex=0&pageSize=1000`)
       .subscribe(res => this.hero.set(res));
   }
 
-  handleDeleteHero(id: number) : void {
-    this.http.delete(`https://localhost:7098/api/Hero/${id}`)
+  handleDeleteHero(id: number): void {
+    this.http.delete(`${this.apiBaseUrl}/api/Hero/${id}`)
       .subscribe({
-          next: ()=> {
-            this.loadAllHeroes();
-            console.log("hero with id ${id} deleted successfully")
-          },
-          error: (err) => console.error('Delete failed:', err)
-      })
+        next: () => {
+          this.loadAllHeroes();
+          console.log(`hero with id ${id} deleted successfully`);
+        },
+        error: err => console.error('Delete failed:', err)
+      });
   }
 
   formatValue(value: string | null | undefined, fallback = 'NO') {
-  return value ?? fallback;
-}
+    return value ?? fallback;
+  }
 }

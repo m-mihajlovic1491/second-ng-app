@@ -16,6 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class CreateMonsterForm {
   private httpClient = inject(HttpClient);
+  private readonly apiBaseUrl =
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
+    'https://localhost:7098';
 
   nameControl = new FormControl('');
   damageControl = new FormControl('');
@@ -33,13 +36,15 @@ export class CreateMonsterForm {
       defense
     };
 
-    this.httpClient.post('https://localhost:7098/api/Monster', payload, { responseType: 'text' }).subscribe({
-      next: () => {
-        this.message.set('Monster created successfully.');
-      },
-      error: err => {
-        this.message.set(err?.error ? JSON.stringify(err.error) : 'Failed to create monster.');
-      }
-    });
+    this.httpClient
+      .post(`${this.apiBaseUrl}/api/Monster`, payload, { responseType: 'text' })
+      .subscribe({
+        next: () => {
+          this.message.set('Monster created successfully.');
+        },
+        error: err => {
+          this.message.set(err?.error ? JSON.stringify(err.error) : 'Failed to create monster.');
+        }
+      });
   }
 }

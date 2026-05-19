@@ -26,7 +26,7 @@ describe('HeroTableComponent', () => {
 
   it('should create', () => {
     fixture.detectChanges();
-    const request = httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10');
+    const request = httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=1000');
     request.flush([]);
 
     expect(component).toBeTruthy();

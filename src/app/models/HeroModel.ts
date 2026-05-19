@@ -3,9 +3,21 @@ export class HeroModel {
   guid!: string;
   name!: string;
   legion?: number; 
-  equippedArmor?: number; 
-  equippedWeapon?: number; 
+  equippedArmor?: equippedWeapon; 
+  equippedWeapon?: equippedArmor; 
   health!: number;
   isDead!: boolean;
   backpack?: number; 
+}
+
+class equippedWeapon {
+  id!: number;
+  name!: string;
+  damage!: number;
+}
+
+class equippedArmor {
+  id!: number;
+  name!: string;
+  defense!: number;
 }

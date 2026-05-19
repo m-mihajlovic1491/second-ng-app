@@ -16,6 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class CreateWeaponForm {
   private httpClient = inject(HttpClient);
+  private readonly apiBaseUrl =
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
+    'https://localhost:7098';
 
   nameControl = new FormControl('');
   damageControl = new FormControl('');
@@ -41,7 +44,7 @@ export class CreateWeaponForm {
     };
 
     this.httpClient
-      .post('https://localhost:7098/api/Weapon/Weapon', payload, { responseType: 'text' })
+      .post(`${this.apiBaseUrl}/api/Weapon/Weapon`, payload, { responseType: 'text' })
       .subscribe({
         next: () => {
           this.message.set('Weapon created successfully.');

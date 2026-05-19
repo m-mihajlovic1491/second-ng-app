@@ -4,10 +4,15 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CreateWeaponForm } from './create-weapon-form';
 
+const testApiBaseUrl = 'https://localhost:9876';
+const endpoint = (path: string) => `${testApiBaseUrl}${path}`;
+
 describe('CreateWeaponForm', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl = testApiBaseUrl;
+
     await TestBed.configureTestingModule({
       imports: [CreateWeaponForm],
       providers: [provideZonelessChangeDetection(), provideHttpClient(), provideHttpClientTesting()]
@@ -18,6 +23,7 @@ describe('CreateWeaponForm', () => {
 
   afterEach(() => {
     httpMock.verify();
+    delete (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl;
   });
 
   it('shows validation message when name is missing', () => {
@@ -41,7 +47,7 @@ describe('CreateWeaponForm', () => {
 
     component.createWeapon();
 
-    const request = httpMock.expectOne('https://localhost:7098/api/Weapon/Weapon');
+    const request = httpMock.expectOne(endpoint('/api/Weapon/Weapon'));
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({ name: 'Sword', damage: 15 });
 
