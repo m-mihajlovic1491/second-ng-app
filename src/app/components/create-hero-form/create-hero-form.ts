@@ -8,8 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { of } from 'rxjs';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
-import { HeroModel } from '../../models/HeroModel';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { WeaponModel } from '../../models/WeaponModel';
 
 @Component({
@@ -115,39 +114,17 @@ export class CreateHeroForm implements OnInit {
     this.message.set(null);
     this.isError.set(false);
 
+    const payload =
+      selectedWeaponId === null ? { name: heroName } : { name: heroName, weaponId: selectedWeaponId };
+
     this.httpClient
-      .post(`${this.apiBaseUrl}/api/Hero`, { name: heroName }, { responseType: 'text' })
+      .post(`${this.apiBaseUrl}/api/Hero`, payload, { responseType: 'text' })
       .pipe(
-        switchMap(() => {
-          if (selectedWeaponId === null) {
-            return of('Hero created successfully.');
-          }
-
-          return this.httpClient
-            .get<HeroModel[]>(
-              `${this.apiBaseUrl}/api/Hero/Heroes?pageIndex=0&search=${encodeURIComponent(heroName)}`
-            )
-            .pipe(
-              map(heroes => {
-                const heroId =
-                  heroes
-                    .filter(x => (x.name ?? '').trim().toLowerCase() === heroName.toLowerCase())
-                    .sort((a, b) => b.id - a.id)[0]?.id ?? null;
-
-                if (heroId === null) {
-                  throw new Error('Hero created, but failed to resolve hero id for weapon assignment.');
-                }
-
-                return heroId;
-              }),
-              switchMap(heroId =>
-                this.httpClient.post(`${this.apiBaseUrl}/api/Hero/${heroId}/${selectedWeaponId}`, null, {
-                  responseType: 'text'
-                })
-              ),
-              map(() => 'Hero created and weapon assigned successfully.')
-            );
-        }),
+        map(() =>
+          selectedWeaponId === null
+            ? 'Hero created successfully.'
+            : 'Hero created and weapon assigned successfully.'
+        ),
         catchError(err => {
           const errorMessage =
             typeof err?.error === 'string' ? err.error : (err?.message ?? 'Failed to create hero.');

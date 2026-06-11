@@ -73,17 +73,9 @@ describe('CreateHeroForm', () => {
     component.createHero();
 
     const createRequest = httpMock.expectOne(endpoint('/api/Hero'));
+    expect(createRequest.request.method).toBe('POST');
+    expect(createRequest.request.body).toEqual({ name: 'Ares', weaponId: 3 });
     createRequest.flush('Hero Ares saved to database');
-
-    const getHeroesRequest = httpMock.expectOne(endpoint('/api/Hero/Heroes?pageIndex=0&search=Ares'));
-    getHeroesRequest.flush([
-      { id: 8, name: 'Ares' },
-      { id: 12, name: 'Ares' }
-    ]);
-
-    const assignRequest = httpMock.expectOne(endpoint('/api/Hero/12/3'));
-    expect(assignRequest.request.method).toBe('POST');
-    assignRequest.flush('weapon added to hero successfully');
 
     expect(component.message()).toBe('Hero created and weapon assigned successfully.');
     expect(component.isError()).toBeFalse();
@@ -106,7 +98,7 @@ describe('CreateHeroForm', () => {
     expect(component.isError()).toBeTrue();
   });
 
-  it('shows API error when weapon assignment request fails', () => {
+  it('shows API error when create hero with weapon request fails', () => {
     const fixture = TestBed.createComponent(CreateHeroForm);
     const component = fixture.componentInstance;
 
@@ -117,13 +109,9 @@ describe('CreateHeroForm', () => {
     component.weaponControl.setValue(3);
     component.createHero();
 
-    httpMock.expectOne(endpoint('/api/Hero')).flush('Hero Ares saved to database');
-    httpMock
-      .expectOne(endpoint('/api/Hero/Heroes?pageIndex=0&search=Ares'))
-      .flush([{ id: 8, name: 'Ares' }]);
-
-    const assignRequest = httpMock.expectOne(endpoint('/api/Hero/8/3'));
-    assignRequest.flush('weapon not found', { status: 404, statusText: 'Not Found' });
+    const createRequest = httpMock.expectOne(endpoint('/api/Hero'));
+    expect(createRequest.request.body).toEqual({ name: 'Ares', weaponId: 3 });
+    createRequest.flush('weapon not found', { status: 404, statusText: 'Not Found' });
 
     expect(component.message()).toBe('weapon not found');
     expect(component.isError()).toBeTrue();
