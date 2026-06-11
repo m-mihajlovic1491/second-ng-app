@@ -1,13 +1,19 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
+
+interface BulkHealCombatantsResult {
+  heroesHealed: number;
+  monstersHealed: number;
+}
 
 @Component({
   selector: 'app-root',
@@ -96,6 +102,23 @@ import { map } from 'rxjs/operators';
           </button>
           }
           <span class="toolbar-title">Realm Command</span>
+          <span class="toolbar-spacer"></span>
+          @if (bulkHealMessage()) {
+          <span class="toolbar-message" [class.error]="bulkHealIsError()">
+            {{ bulkHealMessage() }}
+          </span>
+          }
+          <button
+            mat-flat-button
+            class="bulk-heal-button"
+            type="button"
+            [disabled]="isHealingCombatants()"
+            (click)="healAllCombatants()"
+            aria-label="Heal all heroes and monsters"
+          >
+            <mat-icon>healing</mat-icon>
+            {{ isHealingCombatants() ? 'Healing...' : 'Heal All' }}
+          </button>
         </mat-toolbar>
 
         <main class="page-shell">
@@ -194,6 +217,25 @@ import { map } from 'rxjs/operators';
         letter-spacing: 0.08em;
       }
 
+      .toolbar-spacer {
+        flex: 1 1 auto;
+      }
+
+      .toolbar-message {
+        color: var(--realm-parchment-light);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0 0.85rem;
+      }
+
+      .toolbar-message.error {
+        color: #ffd6cf;
+      }
+
+      .bulk-heal-button mat-icon {
+        margin-right: 0.35rem;
+      }
+
       .page-shell {
         padding: clamp(1rem, 3vw, 2rem);
       }
@@ -202,11 +244,26 @@ import { map } from 'rxjs/operators';
         max-width: 1200px;
         margin: 0 auto;
       }
+
+      @media (max-width: 720px) {
+        .toolbar-message {
+          display: none;
+        }
+      }
     `,
   ],
 })
 export class App {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly httpClient = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly apiBaseUrl =
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
+    'https://localhost:7098';
+
+  readonly isHealingCombatants = signal(false);
+  readonly bulkHealMessage = signal<string | null>(null);
+  readonly bulkHealIsError = signal(false);
 
   readonly isHandset = toSignal(
     this.breakpointObserver.observe('(max-width: 960px)').pipe(map((result) => result.matches)),
@@ -217,5 +274,41 @@ export class App {
     if (this.isHandset()) {
       drawer.close();
     }
+  }
+
+  healAllCombatants(): void {
+    if (this.isHealingCombatants()) {
+      return;
+    }
+
+    this.isHealingCombatants.set(true);
+    this.bulkHealMessage.set(null);
+    this.bulkHealIsError.set(false);
+
+    this.httpClient
+      .patch<BulkHealCombatantsResult>(`${this.apiBaseUrl}/api/combatants/bulkheal`, null)
+      .pipe(finalize(() => this.isHealingCombatants.set(false)))
+      .subscribe({
+        next: (result) => {
+          this.bulkHealMessage.set(
+            `Healed ${result.heroesHealed} heroes and ${result.monstersHealed} monsters.`,
+          );
+          this.refreshCurrentPage();
+        },
+        error: (err) => {
+          const errorMessage =
+            typeof err?.error === 'string' ? err.error : 'Failed to heal combatants.';
+          this.bulkHealMessage.set(errorMessage);
+          this.bulkHealIsError.set(true);
+        },
+      });
+  }
+
+  private refreshCurrentPage(): void {
+    const currentUrl = this.router.url;
+
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl(currentUrl);
+    });
   }
 }

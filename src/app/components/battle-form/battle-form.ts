@@ -59,7 +59,7 @@ export class BattleFormComponent implements OnInit {
     };
 
     this.httpClient
-      .get<HeroModel[]>(`${this.apiBaseUrl}/api/Hero/Heroes?pageIndex=0&pageSize=10`)
+      .get<HeroModel[]>(`${this.apiBaseUrl}/api/Hero/Heroes?pageIndex=0&pageSize=1000`)
       .pipe(finalize(onRequestFinished))
       .subscribe({
         next: res => this.heroes.set(res),
@@ -70,7 +70,7 @@ export class BattleFormComponent implements OnInit {
       });
 
     this.httpClient
-      .get<MonsterModel[]>(`${this.apiBaseUrl}/api/Monster/Monsters?pageIndex=0&pageSize=10`)
+      .get<MonsterModel[]>(`${this.apiBaseUrl}/api/Monster/Monsters?pageIndex=0&pageSize=1000`)
       .pipe(finalize(onRequestFinished))
       .subscribe({
         next: res => this.monsters.set(res),

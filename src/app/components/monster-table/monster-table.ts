@@ -29,14 +29,14 @@ export class MonsterTableComponent implements OnInit {
     const search = this.formControl.value?.trim() ?? '';
     this.http
       .get<MonsterModel[]>(
-        `https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10&search=${encodeURIComponent(search)}`
+        `https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=1000&search=${encodeURIComponent(search)}`
       )
       .subscribe(res => this.monsters.set(res));
   }
 
   loadAllMonsters() {
     this.http
-      .get<MonsterModel[]>('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10')
+      .get<MonsterModel[]>('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=1000')
       .subscribe(res => this.monsters.set(res));
   }
 }
