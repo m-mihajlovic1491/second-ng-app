@@ -22,4 +22,11 @@ describe('About', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render core game rules', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.textContent).toContain('Combat');
+    expect(compiled.textContent).toContain('A legion can hold up to 3 heroes.');
+  });
 });

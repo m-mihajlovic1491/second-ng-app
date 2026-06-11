@@ -5,3 +5,30 @@
 .chronicle-block {
   margin-inline: 0;
 }
+
+.rules-section {
+  margin-top: 1rem;
+}
+
+.rules-section:first-of-type {
+  margin-top: 0;
+}
+
+.rules-list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--realm-ink-muted);
+  line-height: 1.6;
+}
+
+.rules-list li + li {
+  margin-top: 0.4rem;
+}
+
+.rules-formula {
+  margin: 0.75rem 0 0;
+  border-left: 3px solid var(--realm-gold);
+  color: var(--realm-ink);
+  font-style: italic;
+  padding-left: 0.75rem;
+}

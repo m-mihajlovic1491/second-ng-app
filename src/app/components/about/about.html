@@ -1,14 +1,66 @@
 <section class="page-card about-realm">
-  <h1 class="section-title">The Realm Awaits</h1>
+  <h1 class="section-title">Rules of the Realm</h1>
   <p class="section-subtitle">
-    Command warriors, wizards, monsters, and legions from the council table.
+    Command warriors, wizards, monsters, and legions from the council table. These rules mirror how the realm resolves
+    heroes, weapons, monsters, battles, and chronicles.
   </p>
 
-  <div class="chronicle-block">
-    <h3 class="chronicle-title">Keeper's Note</h3>
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Heroes & Gear</h2>
+    <ul class="rules-list">
+      <li>Hero names are required, must be unique, and can be no longer than 20 characters.</li>
+      <li>Every hero begins with 100 HP.</li>
+      <li>A hero can carry one equipped weapon and one equipped armor piece.</li>
+      <li>A hero without a weapon deals 0 damage in battle.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Weapons</h2>
+    <ul class="rules-list">
+      <li>Weapon names can be no longer than 20 characters.</li>
+      <li>Weapon damage must be greater than 0.</li>
+      <li>A hero can equip one weapon at a time; choosing another weapon replaces the current one.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Monsters</h2>
+    <ul class="rules-list">
+      <li>Monsters begin with 100 HP by default.</li>
+      <li>Monster damage must be between 0 and 100.</li>
+      <li>Monster defense reduces incoming hero damage by a percentage.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Combat</h2>
+    <ul class="rules-list">
+      <li>Each round, the monster strikes first, then the hero retaliates.</li>
+      <li>Battle continues until either the hero or the monster reaches 0 HP.</li>
+      <li>Health is clamped between 0 and 100 after every hit.</li>
+      <li>No damage is exchanged if both fighters are already at 0 HP, both sides deal 0 damage, or both defenses fully block damage.</li>
+    </ul>
+    <p class="rules-formula">Hero hit: weapon damage reduced by the monster's defense percentage.</p>
+    <p class="rules-formula">Monster hit: monster damage reduced by the hero armor's defense percentage.</p>
+  </div>
+
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Legions</h2>
+    <ul class="rules-list">
+      <li>Legion names are required, must be unique, and can be no longer than 40 characters.</li>
+      <li>A legion can hold up to 3 heroes.</li>
+      <li>Only living heroes can join a legion.</li>
+      <li>A hero must have a weapon with damage greater than 0 to join.</li>
+      <li>A hero cannot be added twice to the same legion.</li>
+    </ul>
+  </div>
+
+  <div class="rules-section chronicle-block">
+    <h2 class="chronicle-title">Battle Chronicles</h2>
     <p class="chronicle-text">
-      Every hero needs a weapon, every monster needs a legend, and every battle writes another page in the realm's
-      chronicle.
+      Every completed battle is preserved in the realm's records with the winner, loser, remaining HP, and fighter IDs.
+      Visit Battle Logs to read the latest chronicles.
     </p>
   </div>
 </section>
