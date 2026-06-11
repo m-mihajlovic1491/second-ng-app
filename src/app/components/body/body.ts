@@ -37,7 +37,7 @@ import { MatInputModule } from '@angular/material/input';
 
             <ng-container matColumnDef="health">
               <th mat-header-cell *matHeaderCellDef> Health </th>
-              <td mat-cell *matCellDef="let hero"> {{ hero.health }} </td>
+              <td mat-cell *matCellDef="let hero"><span class="stat-badge">{{ hero.health }}</span></td>
             </ng-container>
 
             <ng-container matColumnDef="equippedWeapon">
@@ -60,7 +60,7 @@ import { MatInputModule } from '@angular/material/input';
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let hero; columns: displayedColumns;"></tr>
+            <tr mat-row class="entity-hero" *matRowDef="let hero; columns: displayedColumns;"></tr>
           </table>
         </div>
       </div>

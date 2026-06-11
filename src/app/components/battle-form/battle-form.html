@@ -1,7 +1,7 @@
 <mat-card class="page-card form-card">
   <mat-card-header>
-    <mat-card-title>Start Battle</mat-card-title>
-    <mat-card-subtitle>Select one hero and one monster to fight.</mat-card-subtitle>
+    <mat-card-title>Arena of Trials</mat-card-title>
+    <mat-card-subtitle>Select one hero and one monster to settle their fate.</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -60,6 +60,9 @@
   }
 
   @if (message()) {
-    <pre class="result">{{ message() }}</pre>
+    <div class="chronicle-block">
+      <h3 class="chronicle-title">Battle Chronicle</h3>
+      <p class="chronicle-text">{{ message() }}</p>
+    </div>
   }
 </mat-card>

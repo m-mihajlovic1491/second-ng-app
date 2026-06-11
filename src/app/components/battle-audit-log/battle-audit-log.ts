@@ -10,8 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule, MatTableModule, MatIconModule],
   template: `
     <section class="page-card">
-      <h1 class="section-title">Battle Logs</h1>
-      <p class="section-subtitle">Latest battle outcomes fetched from the battle results service.</p>
+      <h1 class="section-title">Battle Chronicles</h1>
+      <p class="section-subtitle">Latest battle outcomes preserved by the realm scribes.</p>
 
       <div class="table-shell">
         <div class="table-scroll">
@@ -28,12 +28,12 @@ import { MatIconModule } from '@angular/material/icon';
 
             <ng-container matColumnDef="winnerName">
               <th mat-header-cell *matHeaderCellDef>Winner</th>
-              <td mat-cell *matCellDef="let log">{{ log.winnerName }}</td>
+              <td mat-cell *matCellDef="let log"><span class="winner-name">{{ log.winnerName }}</span></td>
             </ng-container>
 
             <ng-container matColumnDef="winnerRemainingHealth">
               <th mat-header-cell *matHeaderCellDef>Remaining HP</th>
-              <td mat-cell *matCellDef="let log">{{ log.winnerRemainingHealth }}</td>
+              <td mat-cell *matCellDef="let log"><span class="stat-badge">{{ log.winnerRemainingHealth }}</span></td>
             </ng-container>
 
             <ng-container matColumnDef="loserName">
@@ -47,7 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row class="chronicle-row" *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </div>
       </div>

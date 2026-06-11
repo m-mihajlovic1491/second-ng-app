@@ -25,9 +25,9 @@ import { WeaponModel } from '../../models/WeaponModel';
     MatSelectModule
   ],
   template: `
-    <mat-card class="page-card form-card">
+    <mat-card class="page-card form-card forge-hero">
       <mat-card-header>
-        <mat-card-title>Create New Hero</mat-card-title>
+        <mat-card-title>Enlist New Hero</mat-card-title>
         <mat-card-subtitle>Add a champion to your active roster.</mat-card-subtitle>
       </mat-card-header>
 
@@ -55,7 +55,7 @@ import { WeaponModel } from '../../models/WeaponModel';
 
       <mat-card-actions class="actions-row">
         <button mat-flat-button color="primary" type="button" [disabled]="isSubmitting()" (click)="createHero()">
-          Create hero
+          Enlist Hero
         </button>
       </mat-card-actions>
 

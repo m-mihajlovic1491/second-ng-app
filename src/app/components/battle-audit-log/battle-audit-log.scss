@@ -12,3 +12,12 @@
 .battle-logs-table th:last-child {
   min-width: 200px;
 }
+
+.chronicle-row {
+  border-left: 4px solid var(--realm-gold);
+}
+
+.winner-name {
+  color: var(--realm-forest);
+  font-weight: 700;
+}

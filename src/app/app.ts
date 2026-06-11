@@ -30,60 +30,60 @@ import { map } from 'rxjs/operators';
         [opened]="!isHandset()"
       >
         <div class="drawer-header">
-          <h2>Strategy Hub</h2>
-          <p>Command your roster</p>
+          <h2>War Council</h2>
+          <p>Summon heroes. Rally legions.</p>
         </div>
 
         <mat-divider />
 
         <nav class="drawer-nav">
           <a mat-button routerLink="/users" routerLinkActive="active-link" (click)="closeDrawerOnMobile(drawer)"
-            >All Heroes</a
+            ><mat-icon>groups</mat-icon>All Heroes</a
           >
           <a
             mat-button
             routerLink="/create-hero"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >Create Hero</a
+            ><mat-icon>person_add</mat-icon>Create Hero</a
           >
           <a
             mat-button
             routerLink="/create-weapon"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >Create Weapon</a
+            ><mat-icon>construction</mat-icon>Create Weapon</a
           >
           <a
             mat-button
             routerLink="/monsters"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >All Monsters</a
+            ><mat-icon>pest_control</mat-icon>All Monsters</a
           >
           <a
             mat-button
             routerLink="/create-monster"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >Create Monster</a
+            ><mat-icon>biotech</mat-icon>Create Monster</a
           >
           <a
             mat-button
             routerLink="/battle"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >Battle</a
+            ><mat-icon>sports_martial_arts</mat-icon>Battle</a
           >
           <a
             mat-button
             routerLink="/battle-audit-logs"
             routerLinkActive="active-link"
             (click)="closeDrawerOnMobile(drawer)"
-            >Battle Logs</a
+            ><mat-icon>menu_book</mat-icon>Battle Logs</a
           >
           <a mat-button routerLink="/about" routerLinkActive="active-link" (click)="closeDrawerOnMobile(drawer)"
-            >About</a
+            ><mat-icon>auto_stories</mat-icon>About</a
           >
         </nav>
       </mat-sidenav>
@@ -95,7 +95,7 @@ import { map } from 'rxjs/operators';
             <mat-icon>menu</mat-icon>
           </button>
           }
-          <span class="toolbar-title">Strategy Game Control Panel</span>
+          <span class="toolbar-title">Realm Command</span>
         </mat-toolbar>
 
         <main class="page-shell">
@@ -114,27 +114,33 @@ import { map } from 'rxjs/operators';
 
       .app-drawer {
         width: 248px;
-        border-right: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 80%, transparent);
-        background: linear-gradient(
-          180deg,
-          color-mix(in srgb, var(--mat-sys-surface-container-high) 90%, #0c1018) 0%,
-          color-mix(in srgb, var(--mat-sys-surface-container) 88%, #0f141f) 100%
-        );
+        border-right: 1px solid rgba(61, 36, 21, 0.55);
+        background:
+          linear-gradient(180deg, rgba(255, 248, 232, 0.72) 0%, rgba(232, 213, 181, 0.88) 100%),
+          var(--realm-parchment-deep);
+        box-shadow: inset -1px 0 0 rgba(184, 134, 11, 0.32);
         padding: 1rem 0.75rem;
       }
 
       .drawer-header {
-        padding: 0.25rem 0.75rem 1rem;
+        border: 1px solid rgba(107, 68, 35, 0.42);
+        border-radius: 10px;
+        background: rgba(255, 248, 232, 0.58);
+        padding: 0.85rem 0.75rem 1rem;
+        box-shadow: inset 0 0 0 1px rgba(184, 134, 11, 0.28);
       }
 
       .drawer-header h2 {
         margin: 0;
-        font-size: 1.1rem;
+        color: var(--realm-ink);
+        font-family: 'Cinzel', Georgia, serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.06em;
       }
 
       .drawer-header p {
         margin: 0.35rem 0 0;
-        color: var(--mat-sys-on-surface-variant);
+        color: var(--realm-ink-muted);
         font-size: 0.85rem;
       }
 
@@ -146,27 +152,46 @@ import { map } from 'rxjs/operators';
       }
 
       .drawer-nav a {
+        color: var(--realm-ink);
         justify-content: flex-start;
         width: 100%;
-        border-radius: 999px;
-        letter-spacing: 0.01em;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        font-weight: 600;
+        letter-spacing: 0.015em;
       }
 
       .drawer-nav a.active-link {
-        background: color-mix(in srgb, var(--mat-sys-primary) 22%, transparent);
+        border-color: rgba(184, 134, 11, 0.5);
+        background: rgba(184, 134, 11, 0.18);
+        color: var(--realm-leather-dark);
+        box-shadow: inset 0 0 0 1px rgba(255, 248, 232, 0.45);
+      }
+
+      .drawer-nav mat-icon {
+        color: var(--realm-leather);
+        margin-right: 0.65rem;
+        font-size: 1.2rem;
+        height: 1.2rem;
+        width: 1.2rem;
       }
 
       .app-toolbar {
         position: sticky;
         top: 0;
         z-index: 10;
-        border-bottom: 1px solid color-mix(in srgb, var(--mat-sys-outline-variant) 60%, transparent);
+        border-bottom: 1px solid rgba(184, 134, 11, 0.5);
+        background:
+          linear-gradient(90deg, var(--realm-leather-dark), var(--realm-leather) 45%, #7f5529);
+        color: var(--realm-parchment-light);
+        box-shadow: 0 8px 22px rgba(61, 36, 21, 0.22);
       }
 
       .toolbar-title {
         margin-left: 0.5rem;
-        font-weight: 600;
-        letter-spacing: 0.015em;
+        font-family: 'Cinzel', Georgia, serif;
+        font-weight: 700;
+        letter-spacing: 0.08em;
       }
 
       .page-shell {
