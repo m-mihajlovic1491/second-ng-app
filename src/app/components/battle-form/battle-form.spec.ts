@@ -4,6 +4,10 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BattleFormComponent } from './battle-form';
 
+const rosterPageSize = 1000;
+const heroesEndpoint = `https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=${rosterPageSize}`;
+const monstersEndpoint = `https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=${rosterPageSize}`;
+
 describe('BattleFormComponent', () => {
   let httpMock: HttpTestingController;
 
@@ -26,10 +30,8 @@ describe('BattleFormComponent', () => {
 
     fixture.detectChanges();
 
-    const heroesRequest = httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10');
-    const monstersRequest = httpMock.expectOne(
-      'https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10'
-    );
+    const heroesRequest = httpMock.expectOne(heroesEndpoint);
+    const monstersRequest = httpMock.expectOne(monstersEndpoint);
 
     heroesRequest.flush([{ id: 1, name: 'Arthur', health: 90 }]);
     monstersRequest.flush([{ id: 2, name: 'Goblin', health: 70 }]);
@@ -45,8 +47,8 @@ describe('BattleFormComponent', () => {
 
     fixture.detectChanges();
 
-    httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10').flush([]);
-    httpMock.expectOne('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10').flush([]);
+    httpMock.expectOne(heroesEndpoint).flush([]);
+    httpMock.expectOne(monstersEndpoint).flush([]);
 
     component.startBattle();
 
@@ -59,10 +61,10 @@ describe('BattleFormComponent', () => {
 
     fixture.detectChanges();
 
-    httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10').flush([
+    httpMock.expectOne(heroesEndpoint).flush([
       { id: 1, name: 'Arthur', health: 90 }
     ]);
-    httpMock.expectOne('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10').flush([
+    httpMock.expectOne(monstersEndpoint).flush([
       { id: 2, name: 'Goblin', health: 70 }
     ]);
 
@@ -86,10 +88,10 @@ describe('BattleFormComponent', () => {
 
     fixture.detectChanges();
 
-    httpMock.expectOne('https://localhost:7098/api/Hero/Heroes?pageIndex=0&pageSize=10').flush([
+    httpMock.expectOne(heroesEndpoint).flush([
       { id: 1, name: 'Arthur', health: 90 }
     ]);
-    httpMock.expectOne('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=10').flush([
+    httpMock.expectOne(monstersEndpoint).flush([
       { id: 2, name: 'Goblin', health: 70 }
     ]);
 
