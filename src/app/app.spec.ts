@@ -6,6 +6,7 @@ import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
 
 const testApiBaseUrl = 'https://localhost:9876';
+const testAuthApiBaseUrl = 'https://localhost:9877';
 const endpoint = (path: string) => `${testApiBaseUrl}${path}`;
 
 describe('App', () => {
@@ -13,6 +14,7 @@ describe('App', () => {
 
   beforeEach(async () => {
     localStorage.clear();
+    (globalThis as { __authApiBaseUrl?: string }).__authApiBaseUrl = testAuthApiBaseUrl;
     (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl = testApiBaseUrl;
 
     await TestBed.configureTestingModule({
@@ -31,6 +33,7 @@ describe('App', () => {
   afterEach(() => {
     httpMock.verify();
     localStorage.clear();
+    delete (globalThis as { __authApiBaseUrl?: string }).__authApiBaseUrl;
     delete (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl;
   });
 

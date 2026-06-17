@@ -25,9 +25,9 @@ const authSessionStorageKey = 'strategy-game-auth-session';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly httpClient = inject(HttpClient);
-  private readonly apiBaseUrl =
-    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
-    'https://localhost:7098';
+  private readonly authApiBaseUrl =
+    (globalThis as { __authApiBaseUrl?: string }).__authApiBaseUrl ??
+    'https://localhost:7101';
   private readonly session = signal<AuthSession | null>(this.readStoredSession());
 
   readonly currentSession = this.session.asReadonly();
@@ -39,13 +39,13 @@ export class AuthService {
 
   register(email: string, password: string) {
     return this.httpClient
-      .post<AuthSession>(`${this.apiBaseUrl}/api/auth/register`, { email, password })
+      .post<AuthSession>(`${this.authApiBaseUrl}/api/auth/register`, { email, password })
       .pipe(tap((session) => this.storeSession(session)));
   }
 
   login(email: string, password: string) {
     return this.httpClient
-      .post<AuthSession>(`${this.apiBaseUrl}/api/auth/login`, { email, password })
+      .post<AuthSession>(`${this.authApiBaseUrl}/api/auth/login`, { email, password })
       .pipe(tap((session) => this.storeSession(session)));
   }
 
