@@ -16,6 +16,9 @@ import { MonsterModel } from '../../models/MonsterModel';
 })
 export class MonsterTableComponent implements OnInit {
   private http = inject(HttpClient);
+  private readonly apiBaseUrl =
+    (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
+    'https://localhost:7098';
 
   formControl = new FormControl('');
   monsters = signal<MonsterModel[]>([]);
@@ -29,14 +32,14 @@ export class MonsterTableComponent implements OnInit {
     const search = this.formControl.value?.trim() ?? '';
     this.http
       .get<MonsterModel[]>(
-        `https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=1000&search=${encodeURIComponent(search)}`
+        `${this.apiBaseUrl}/api/Monster/Monsters?pageIndex=0&pageSize=1000&search=${encodeURIComponent(search)}`
       )
       .subscribe(res => this.monsters.set(res));
   }
 
   loadAllMonsters() {
     this.http
-      .get<MonsterModel[]>('https://localhost:7098/api/Monster/Monsters?pageIndex=0&pageSize=1000')
+      .get<MonsterModel[]>(`${this.apiBaseUrl}/api/Monster/Monsters?pageIndex=0&pageSize=1000`)
       .subscribe(res => this.monsters.set(res));
   }
 }

@@ -1,14 +1,15 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
+import { AuthService } from './services/auth.service';
 
 interface BulkHealCombatantsResult {
   heroesHealed: number;
@@ -33,8 +34,9 @@ interface BulkHealCombatantsResult {
         #drawer
         class="app-drawer"
         [mode]="isHandset() ? 'over' : 'side'"
-        [opened]="!isHandset()"
+        [opened]="showAuthenticatedShell() && !isHandset()"
       >
+        @if (showAuthenticatedShell()) {
         <div class="drawer-header">
           <h2>War Council</h2>
           <p>Summon heroes. Rally legions.</p>
@@ -92,10 +94,12 @@ interface BulkHealCombatantsResult {
             ><mat-icon>auto_stories</mat-icon>About</a
           >
         </nav>
+        }
       </mat-sidenav>
 
       <mat-sidenav-content>
         <mat-toolbar class="app-toolbar" color="primary">
+          @if (showAuthenticatedShell()) {
           @if (isHandset()) {
           <button mat-icon-button type="button" (click)="drawer.toggle()" aria-label="Open navigation menu">
             <mat-icon>menu</mat-icon>
@@ -119,6 +123,13 @@ interface BulkHealCombatantsResult {
             <mat-icon>healing</mat-icon>
             {{ isHealingCombatants() ? 'Healing...' : 'Heal All' }}
           </button>
+          <button mat-button type="button" (click)="logout()">Logout</button>
+          } @else {
+          <span class="toolbar-title">Realm Command</span>
+          <span class="toolbar-spacer"></span>
+          <a mat-button routerLink="/login">Login</a>
+          <a mat-flat-button routerLink="/register">Register</a>
+          }
         </mat-toolbar>
 
         <main class="page-shell">
@@ -257,10 +268,15 @@ export class App {
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly httpClient = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
   private readonly apiBaseUrl =
     (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl ??
     'https://localhost:7098';
 
+  readonly currentUrl = signal(this.router.url);
+  readonly showAuthenticatedShell = computed(
+    () => this.authService.isAuthenticated() && !this.isPublicRoute(this.currentUrl()),
+  );
   readonly isHealingCombatants = signal(false);
   readonly bulkHealMessage = signal<string | null>(null);
   readonly bulkHealIsError = signal(false);
@@ -269,6 +285,12 @@ export class App {
     this.breakpointObserver.observe('(max-width: 960px)').pipe(map((result) => result.matches)),
     { initialValue: false },
   );
+
+  constructor() {
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => this.currentUrl.set(event.urlAfterRedirects));
+  }
 
   closeDrawerOnMobile(drawer: MatSidenav): void {
     if (this.isHandset()) {
@@ -304,11 +326,21 @@ export class App {
       });
   }
 
+  logout(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/login');
+  }
+
   private refreshCurrentPage(): void {
     const currentUrl = this.router.url;
 
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigateByUrl(currentUrl);
     });
+  }
+
+  private isPublicRoute(url: string): boolean {
+    const publicPath = url.split('?')[0];
+    return publicPath === '/' || publicPath === '/login' || publicPath === '/register';
   }
 }

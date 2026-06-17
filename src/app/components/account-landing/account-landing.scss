@@ -1,0 +1,14 @@
+.account-landing-card {
+  max-width: 720px;
+  margin: clamp(2rem, 8vw, 5rem) auto 0;
+  border-left: 5px solid var(--realm-gold);
+}
+
+.account-landing-card p {
+  color: var(--realm-ink-muted);
+  line-height: 1.6;
+}
+
+.account-actions {
+  justify-content: flex-start;
+}

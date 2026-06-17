@@ -6,12 +6,15 @@ import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
 
 const testApiBaseUrl = 'https://localhost:9876';
+const testAuthApiBaseUrl = 'https://localhost:9877';
 const endpoint = (path: string) => `${testApiBaseUrl}${path}`;
 
 describe('App', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
+    localStorage.clear();
+    (globalThis as { __authApiBaseUrl?: string }).__authApiBaseUrl = testAuthApiBaseUrl;
     (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl = testApiBaseUrl;
 
     await TestBed.configureTestingModule({
@@ -29,6 +32,8 @@ describe('App', () => {
 
   afterEach(() => {
     httpMock.verify();
+    localStorage.clear();
+    delete (globalThis as { __authApiBaseUrl?: string }).__authApiBaseUrl;
     delete (globalThis as { __strategyGameApiBaseUrl?: string }).__strategyGameApiBaseUrl;
   });
 
@@ -45,8 +50,23 @@ describe('App', () => {
     expect(compiled.querySelector('.toolbar-title')?.textContent).toContain('Realm Command');
   });
 
-  it('renders global bulk heal button', () => {
+  it('renders account links on public routes', () => {
     const fixture = TestBed.createComponent(App);
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('a[routerLink="/login"]')?.textContent).toContain('Login');
+    expect(compiled.querySelector('a[routerLink="/register"]')?.textContent).toContain('Register');
+    expect(compiled.querySelector('.bulk-heal-button')).toBeNull();
+  });
+
+  it('renders global bulk heal button', () => {
+    storeAuthSession();
+    const fixture = TestBed.createComponent(App);
+    const component = fixture.componentInstance;
+
+    component.currentUrl.set('/users');
 
     fixture.detectChanges();
 
@@ -58,11 +78,13 @@ describe('App', () => {
   });
 
   it('calls bulk heal endpoint, shows healed counts, and refreshes current page', async () => {
+    storeAuthSession();
     const fixture = TestBed.createComponent(App);
     const component = fixture.componentInstance;
     const router = TestBed.inject(Router);
     const navigateByUrlSpy = spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
 
+    component.currentUrl.set('/users');
     fixture.detectChanges();
     component.healAllCombatants();
 
@@ -87,11 +109,13 @@ describe('App', () => {
   });
 
   it('shows error when bulk heal request fails', async () => {
+    storeAuthSession();
     const fixture = TestBed.createComponent(App);
     const component = fixture.componentInstance;
     const router = TestBed.inject(Router);
     const navigateByUrlSpy = spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
 
+    component.currentUrl.set('/users');
     fixture.detectChanges();
     component.healAllCombatants();
 
@@ -110,3 +134,15 @@ describe('App', () => {
     expect(navigateByUrlSpy).not.toHaveBeenCalled();
   });
 });
+
+function storeAuthSession(): void {
+  localStorage.setItem(
+    'strategy-game-auth-session',
+    JSON.stringify({
+      token: 'jwt-token',
+      userId: 'user-1',
+      email: 'user@example.com',
+      expiresAtUtc: new Date(Date.now() + 60_000).toISOString(),
+    })
+  );
+}
